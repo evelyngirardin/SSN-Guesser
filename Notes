@@ -1,0 +1,32 @@
+# Day 1
+
+Downloaded all my data and started working on cleaning it. Main things done
+today was the creation of a function that accepts area numbers and returns
+the location of which owns that area number and the beginnings of reading
+the area number files.
+
+
+# Day 2
+
+Finished up the cleaning function from Day 1 and have the first April file
+in a cleaned CSV. Time to do it to all of them. I also edited how this function
+finds the first row of integers, as the text files are not consistent in where
+they start. Further, did some path management and reorganized the folders.
+Finally, ran the functions on all the raw data and now have all the data
+organized and formatted into new folders. Tomorrow I'll try to compress all the
+data gained from this into a cleaner and shorter form.
+
+
+# Day 3
+
+Started work on the reading function and got it to read a cleaned data file
+and return the list of states and their highest group numbers. Main issue is
+some states started at 99 in Nov 03, and I am unsure how the SSA handled their
+social security numbers. I found a copy of the Death Master File and want to
+search through it to see if South Carolinans already were at 99. Maybe I could
+send a message to the SSA to ask them about it?
+
+https://www.ssa.gov/oact/babynames/numberUSbirths.html
+
+I also found a website that gives the number of social security applicants by
+year of birth and sex. https://www.ssa.gov/oact/babynames/numberUSbirths.html
