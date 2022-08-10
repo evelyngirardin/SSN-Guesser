@@ -1,7 +1,8 @@
 # Give the area number of a SSN as an int and this function returns the location for the area number, abbreviations
-# for states and full descriptors for certain special cases.
+# for states and full descriptors for certain special cases. There is probably a better way to code this.
 
 # TODO: 232, 580, and 586 are all shared area numbers, I will have to research when these area numbers shifted.
+# TODO: See if there is a more efficient way to code this. Probably dicts.
 
 def determine_state_from_area(area):
     if 1 <= area <= 3:
