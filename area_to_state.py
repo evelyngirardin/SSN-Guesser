@@ -5,7 +5,6 @@
 
 # NOTE: 232, 580, and 586 are all shared area numbers, I will have to research
 # when these area numbers shifted.
-import sqlite3
 
 def determine_state_from_area(area):
     if 1 <= area <= 3:
@@ -34,7 +33,7 @@ def determine_state_from_area(area):
         return "VA"
     elif 232 == area:
         return "NC"
-    # NOTE 232 was also temporalily used
+    # NOTE 232 was also temporarily used
     # for West Virgina
     elif 233 <= area <= 236:
         return "WV"
@@ -128,15 +127,3 @@ def determine_state_from_area(area):
         return "Enumeration at Entry"
     else:
         return "Not issued."
-
-
-connection = sqlite3.connect("ssnNumbers.db")
-
-cursor = connection.cursor()
-for i in range(1, 1000):
-    area_code = i
-    state = determine_state_from_area(area_code)
-    print("INSERT INTO areacodestates VALUES (" + str(i) + ", " + "'" + str(state) + "')")
-    cursor.execute("INSERT INTO areacodestates VALUES (" + str(i) + ", " + "'" + str(state) + "')")
-
-connection.commit()

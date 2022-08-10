@@ -1,3 +1,5 @@
+# This file is doing some preliminary visualization of the highest group numbers for the area code of 41.
+
 import matplotlib.pyplot as plt
 import datetime
 import sqlite3
@@ -15,10 +17,16 @@ def get_births(name_of_table, connection):
         groupnumbers.append(row[2])
     return dates, groupnumbers
 
-currentdir = str(os.getcwd())
-connection = sqlite3.connect("ssnNumbers.db")
-date, groupnumber = get_births("groupnumbers", connection)
 
-fig, ax = plt.subplots()
-ax.plot(date, groupnumber, "ro")
-plt.show()
+def main():
+    connection = sqlite3.connect("ssnNumbers.db")
+    date, groupnumber = get_births("groupnumbers", connection)
+
+    fig, ax = plt.subplots()
+    ax.plot(date, groupnumber, "ro")
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()
+

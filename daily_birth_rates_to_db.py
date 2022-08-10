@@ -33,7 +33,13 @@ def export_data_to_sql(export_table, import_table, connection):
         print("INSERT INTO " + export_table +  " VALUES (" + sql_date + ", " + str(birth_rate)+ ")")
 
 
-currentdir = str(os.getcwd())
-connection = sqlite3.connect("ssnNumbers.db")
-export_data_to_sql("leaprates", "birthdates", connection)
-connection.commit()
+def main():
+    connection = sqlite3.connect("ssnNumbers.db")
+    #export_data_to_sql("leaprates", "birthdates", connection)
+    export_data_to_sql("birthrates", "birthdates", connection)
+    connection.commit()
+
+
+if __name__ == "__main__":
+    main()
+
