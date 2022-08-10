@@ -1,42 +1,58 @@
-import re
-import csv
-import os
+# This file takes the data imported by birth_csv_to_db into the table birthdates and generates daily birth rates.
+# TODO: Have to make a separate database for leap years.
+
 import sqlite3
 import datetime
-import matplotlib
 
-def get_births(name_of_table, connection):
-    cursor = connection.cursor()
+
+# Take in births from the birthdates and get the total births across the 14 years by day. Returns data in the form of
+# births_by_day (dict), which has datetime keys of every day of the year, and total (int), the total number of births
+# in the file.
+def get_births(name_of_table, cursor):
+
+    # Get data and set up the return variables.
     rows = cursor.execute("SELECT * FROM " + name_of_table).fetchall()
-    value_dict = {}
+    births_by_day = {}
     total = 0
+
+    # Take data from birthdates and total for each day.
     for row in rows:
+        # Clean data for return rows.
         date = str(row[0])
-        new_date = datetime.date(2000, int(date[4:6]), int(date[6:8]))
+        converted_date = datetime.date(2000, int(date[4:6]), int(date[6:8]))
         births = row[1]
-        #if not (new_date.day == 29 and new_date.month == 2):
-        if new_date in value_dict:
-            value_dict[new_date] += births
-        else:
-            value_dict[new_date] = births
+
+        # Collate data for return rows.
         total += births
-    return value_dict, total
+        if converted_date in births_by_day:
+            births_by_day[converted_date] += births
+        else:
+            births_by_day[converted_date] = births
+
+    return births_by_day, total
 
 
-def export_data_to_sql(export_table, import_table, connection):
-    cursor = connection.cursor()
-    dict, total = get_births(import_table, connection)
-    for date in dict:
+# Takes in births_by_day (dict) and total (int) and formats them into rates and inserts them into the table as rows of
+# form date and birth_rate.
+def export_data_to_sql(births_by_day, total, export_table, cursor):
+    for date in births_by_day:
+        # Format data for database.
         sql_date = date.strftime('%Y%m%d')
-        birth_rate = dict[date]/total
+        birth_rate = births_by_day[date]/total
+
         cursor.execute("INSERT INTO " + export_table +  " VALUES (" + sql_date + ", " + str(birth_rate)+ ")")
-        print("INSERT INTO " + export_table +  " VALUES (" + sql_date + ", " + str(birth_rate)+ ")")
 
 
 def main():
+    # Set up connection and define variables.
     connection = sqlite3.connect("ssnNumbers.db")
-    #export_data_to_sql("leaprates", "birthdates", connection)
-    export_data_to_sql("birthrates", "birthdates", connection)
+    cursor = connection.cursor()
+    import_table = "birthdates"
+    export_table = "birthrates"
+
+    births_by_day, total = get_births(import_table, cursor)
+    export_data_to_sql(births_by_day, total, export_table, cursor)
+
     connection.commit()
 
 

@@ -3,27 +3,35 @@
 import matplotlib.pyplot as plt
 import datetime
 import sqlite3
-import os
 
-def get_births(name_of_table, connection):
-    cursor = connection.cursor()
+
+# Get the births from the table name and format it for the graph.
+def get_births(name_of_table, cursor):
+    # Collect data and set up return variables.
     rows = cursor.execute("SELECT * FROM " + name_of_table + " WHERE areanumber = 41").fetchall()
     dates = []
-    groupnumbers = []
+    group_numbers = []
+
+    # Get data from database and form it into to lists for the plot.
     for row in rows:
         date_str = str(row[0])
         new_date = datetime.date(int(date_str[:4]), int(date_str[4:6]), int(date_str[6:8]))
+
         dates.append(new_date)
-        groupnumbers.append(row[2])
-    return dates, groupnumbers
+        group_numbers.append(row[2])
+    return dates, group_numbers
 
 
 def main():
+    # Set up connection to database.
     connection = sqlite3.connect("ssnNumbers.db")
-    date, groupnumber = get_births("groupnumbers", connection)
+    cursor = connection.cursor()
 
+    date, group_numbers = get_births("groupnumbers", cursor)
+
+    # Make plot.
     fig, ax = plt.subplots()
-    ax.plot(date, groupnumber, "ro")
+    ax.plot(date, group_numbers, "ro")
     plt.show()
 
 
