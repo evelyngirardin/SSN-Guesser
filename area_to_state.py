@@ -1,127 +1,104 @@
 # Give the area number of a SSN as an int and this function returns the location for the area number, abbreviations
-# for states and full descriptors for certain special cases. There is probably a better way to code this.
-
-# TODO: 232, 580, and 586 are all shared area numbers, I will have to research when these area numbers shifted.
-# TODO: See if there is a more efficient way to code this. Probably dicts.
+# for states and full descriptors for certain special cases. Uses a list of ranges as keys in a dict and then runs
+# through the list, generating a string for the possibilities. If more than one region, is it printed as R1,R2 with no
+# space inbetween.
 
 def determine_state_from_area(area):
-    if 1 <= area <= 3:
-        return "NH"
-    elif 4 <= area <= 7:
-        return "ME"
-    elif 8 <= area <= 9:
-        return "VT"
-    elif 10 <= area <= 34:
-        return "MA"
-    elif 35 <= area <= 39:
-        return "RI"
-    elif 40 <= area <= 49:
-        return "CT"
-    elif 50 <= area <= 134:
-        return "NY"
-    elif 135 <= area <= 158:
-        return "NJ"
-    elif 159 <= area <= 211:
-        return "PA"
-    elif 212 <= area <= 220:
-        return "MD"
-    elif 221 <= area <= 222:
-        return "DE"
-    elif 223 <= area <= 231:
-        return "VA"
-    elif 232 == area:
-        return "NC"
-    # NOTE 232 was also temporarily used
-    # for West Virgina
-    elif 233 <= area <= 236:
-        return "WV"
-    elif 247 <= area <= 251:
-        return "SC"
-    elif 252 <= area <= 260:
-        return "GA"
-    elif 261 <= area <= 267:
-        return "FL"
-    elif 268 <= area <= 302:
-        return "OH"
-    elif 303 <= area <= 317:
-        return "IN"
-    elif 318 <= area <= 361:
-        return "IL"
-    elif 362 <= area <= 386:
-        return "MI"
-    elif 387 <= area <= 399:
-        return "WI"
-    elif 400 <= area <= 407:
-        return "KY"
-    elif 408 <= area <= 415:
-        return "TN"
-    elif 416 <= area <= 424:
-        return "AL"
-    elif 425 <= area <= 428:
-        return "MS"
-    elif 429 <= area <= 432:
-        return "AR"
-    elif 433 <= area <= 439:
-        return "LA"
-    elif 440 <= area <= 448:
-        return "OK"
-    elif 449 <= area <= 467:
-        return "TX"
-    elif 468 <= area <= 477:
-        return "MN"
-    elif 478 <= area <= 485:
-        return "IO"
-    elif 486 <= area <= 500:
-        return "MO"
-    elif 501 <= area <= 502:
-        return "ND"
-    elif 503 <= area <= 504:
-        return "SD"
-    elif 505 <= area <= 508:
-        return "NE"
-    elif 509 <= area <= 515:
-        return "KS"
-    elif 516 <= area <= 517:
-        return "MT"
-    elif 518 <= area <= 519:
-        return "IO"
-    elif 520 == area:
-        return "WY"
-    elif 521 <= area <= 524:
-        return "CO"
-    elif 525 == area or area == 585:
-        return "NM"
-    elif 526 <= area <= 527:
-        return "AZ"
-    elif 528 <= area <= 529:
-        return "UT"
-    elif 530 == area or area == 680:
-        return "NV"
-    elif 531 <= area <= 539:
-        return "WA"
-    elif 574 == area:
-        return "AK"
-    elif 540 <= area <= 544:
-        return "OR"
-    elif 545 <= area <= 573:
-        return "CA"
-    elif 575 <= area <= 576:
-        return "HI"
-    elif 577 <= area <= 579:
-        return "DC"
-    elif 580 == area:
-        return "VI"
-    # Virgin Islands and Puerto Rico
-    # share 580.
-    elif 581 <= area <= 584:
-        return "PR"
-    # 586 is shared by Guam, American
-    # Samoa, and the Philippine Islands
-    elif 586 == area:
-        return "GU/AS/PI"
-    elif 700 <= area <= 728:
-        return "Railroad Board"
-    elif 729 <= area <= 733:
-        return "Enumeration at Entry"
-    else:
-        return "Not issued."
+    returner = ""
+    area_code_dict = {
+        range(1, 4): "NH",
+        range(4, 8): "ME",
+        range(8, 10): "VT",
+        range(10, 35): "MA",
+        range(35, 40): "RI",
+        range(40, 50): "CT",
+        range(50, 135): "NY",
+        range(135, 159): "NJ",
+        range(159, 212): "PA",
+        range(212, 221): "MD",
+        range(221, 223): "DE",
+        range(223, 232): "VA",
+        range(691, 700): "VA",
+        range(232, 237): "WV",
+        range(232, 233): "NC",
+        range(237, 247): "NC",
+        range(681, 691): "NC",
+        range(247, 251): "SC",
+        range(654, 659): "SC",
+        range(252, 261): "GA",
+        range(667, 676): "GA",
+        range(261, 268): "FL",
+        range(589, 596): "FL",
+        range(766, 773): "FL",
+        range(268, 303): "OH",
+        range(303, 318): "IN",
+        range(318, 362): "IL",
+        range(362, 387): "MI",
+        range(387, 400): "WI",
+        range(400, 408): "KY",
+        range(408, 416): "TN",
+        range(756, 764): "TN",
+        range(416, 425): "AL",
+        range(425, 429): "MS",
+        range(587, 589): "MS",
+        range(752, 756): "MS",
+        range(429, 433): "AR",
+        range(676, 680): "AR",
+        range(433, 440): "LA",
+        range(659, 666): "LA",
+        range(440, 449): "OK",
+        range(449, 468): "TX",
+        range(627, 646): "TX",
+        range(468, 478): "MN",
+        range(478, 486): "IA",
+        range(486, 501): "MO",
+        range(501, 503): "ND",
+        range(503, 505): "SD",
+        range(505, 509): "NE",
+        range(509, 516): "KS",
+        range(516, 518): "MT",
+        range(518, 519): "ID",
+        range(520, 521): "WY",
+        range(521, 525): "CO",
+        range(650, 654): "CO",
+        range(525, 526): "NM",
+        range(585, 586): "NM",
+        range(648, 650): "NM",
+        range(526, 528): "AZ",
+        range(600, 602): "AZ",
+        range(764, 766): "AZ",
+        range(528, 530): "UT",
+        range(646, 648): "UT",
+        range(530, 531): "NV",
+        range(680, 681): "NV",
+        range(531, 540): "WA",
+        range(540, 545): "OR",
+        range(545, 574): "CA",
+        range(602, 627): "CA",
+        range(574, 575): "AK",
+        range(575, 577): "HI",
+        range(750, 752): "HI",
+
+        # Special cases
+        range(577, 580): "DC",
+        range(580, 581): "VI",
+        range(580, 585): "PR",
+        range(596, 600): "PR",
+        range(586, 587): "GU,PI,AS",
+        range(700, 729): "Railroad Board",
+        range(729, 734): "Enumeration at Entry",
+        range(237, 247): "Not Issued",
+        range(587, 666): "Not Issued",
+        range(667, 680): "Not Issued",
+        range(681, 700): "Not Issued",
+        range(750, 773): "Not Issued",
+        range(734, 750): "Not Issued",
+        range(773, 900): "Not Issued",
+        range(0, 1): "Not Issued",
+        range(666, 667): "Not Issued",
+        range(900, 1000): "Not Issued",
+    }
+    for key in area_code_dict:
+        if area in key:
+            returner += area_code_dict[key] + ","
+    return returner[:-1]
