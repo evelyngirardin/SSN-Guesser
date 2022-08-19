@@ -1,5 +1,5 @@
 # This file takes the data imported by birth_csv_to_db into the table birthdates and generates daily birth rates.
-# TODO: Have to make a separate database for leap years.
+# TODO: Have to make a.csv separate database for leap years.
 
 import sqlite3
 import datetime

@@ -1,6 +1,6 @@
-# Give the area number of a SSN as an int and this function returns the location for the area number, abbreviations
-# for states and full descriptors for certain special cases. Uses a list of ranges as keys in a dict and then runs
-# through the list, generating a string for the possibilities. If more than one region, is it printed as R1,R2 with no
+# Give the area number of a.csv SSN as an int and this function returns the location for the area number, abbreviations
+# for states and full descriptors for certain special cases. Uses a.csv list of ranges as keys in a.csv dict and then runs
+# through the list, generating a.csv string for the possibilities. If more than one region, is it printed as R1,R2 with no
 # space inbetween.
 
 def determine_state_from_area(area):
@@ -85,18 +85,18 @@ def determine_state_from_area(area):
         range(580, 585): "PR",
         range(596, 600): "PR",
         range(586, 587): "GU,PI,AS",
-        range(700, 729): "Railroad Board",
-        range(729, 734): "Enumeration at Entry",
-        range(237, 247): "Not Issued",
-        range(587, 666): "Not Issued",
-        range(667, 680): "Not Issued",
-        range(681, 700): "Not Issued",
-        range(750, 773): "Not Issued",
-        range(734, 750): "Not Issued",
-        range(773, 900): "Not Issued",
-        range(0, 1): "Not Issued",
-        range(666, 667): "Not Issued",
-        range(900, 1000): "Not Issued",
+        range(700, 729): "RailroadBoard",
+        range(729, 734): "EnumerationatEntry",
+        range(237, 247): "NotIssued",
+        range(587, 666): "NotIssued",
+        range(667, 680): "NotIssued",
+        range(681, 700): "NotIssued",
+        range(750, 773): "NotIssued",
+        range(734, 750): "NotIssued",
+        range(773, 900): "NotIssued",
+        range(0, 1): "NotIssued",
+        range(666, 667): "NotIssued",
+        range(900, 1000): "NotIssued",
     }
     for key in area_code_dict:
         if area in key:

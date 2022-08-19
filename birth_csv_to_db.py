@@ -1,5 +1,5 @@
 # This file takes in data from us_births_from_social.csv and import it to the table birthdates.
-# us_births_from_social.csv has a by day breakdown of the new social security number holders with rows
+# us_births_from_social.csv has a.csv by day breakdown of the new social security number holders with rows
 # year, month, date_of_month, day_of_week, and births, and it goes from 2000 to 2014.
 
 import csv

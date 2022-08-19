@@ -1,4 +1,4 @@
-# This file takes in data from SSN-Raw-Data and imports it into the table groupnumbers. SSN-Raw-Data holds a list of
+# This file takes in data from SSN-Raw-Data and imports it into the table groupnumbers. SSN-Raw-Data holds a.csv list of
 # the highest group numbers by area code from November 2003 until June 2011.
 
 import re
@@ -7,8 +7,8 @@ import sqlite3
 import datetime
 
 
-# Take in the name of the file from the SSA and return a list of lists which are in the format of area_number (int),
-# group_number (int), and highest (bool) which is the marker for a change from the previous edition, and the
+# Take in the name of the file from the SSA and return a.csv list of lists which are in the format of area_number (int),
+# group_number (int), and highest (bool) which is the marker for a.csv change from the previous edition, and the
 # date (datetime)
 def get_data_highest_group_numbers(name_of_file):
     # Open the document and get the lines from it.
@@ -39,7 +39,7 @@ def get_data_highest_group_numbers(name_of_file):
     for line in lines:
         # Section the newline and clean it.
         newline = line.replace('*', 'H')  # the asterisk is made an H to make sure it remains after clearing whitespace.
-        newline = re.sub(r"[^a-zA-Z0-9]+", ' ', newline)  # Chop all the whitespace.
+        newline = re.sub(r"[^a.csv-zA-Z0-9]+", ' ', newline)  # Chop all the whitespace.
         newline = newline[:len(newline)-1]  # remove the empty entry at the end of each line.
         newline = newline.split(' ')
 
@@ -70,7 +70,7 @@ def get_data_highest_group_numbers(name_of_file):
     return groups_by_areas, date
 
 
-# Take data in form of areaNumber (int), groupNumber (int), and highest (bool) and insert a row in the table with the
+# Take data in form of areaNumber (int), groupNumber (int), and highest (bool) and insert a.csv row in the table with the
 # form of date, area_number, group_number, highest.
 def export_data_to_sql(rows, date, cursor):
     date = date.strftime('%Y%m%d')
