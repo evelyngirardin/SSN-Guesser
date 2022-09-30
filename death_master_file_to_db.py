@@ -4,54 +4,71 @@
 import os
 import sqlite3
 import pandas as pd
-
+import numpy as np
 
 # Go through the death master file documents and insert it into the table deathmaster in the form of
-# area (INTEGER), group (INTEGER), individual (INTEGER), birthday (DATE).
-# TODO: Rewrite this whole function, wrote it while having a headache and it is definitely not optimized,
-#  but it will work for now
-
+# index (integer), area (INTEGER), group (INTEGER), individual (INTEGER), birthday (DATE).
 def get_death_master_file_data(name_of_file, connection):
     print("Starting on: " + str(name_of_file) + ", beginning to read...")
 
     # Comb through the data and import it into a.csv dataframe.
     df = pd.read_csv(name_of_file, header=None, on_bad_lines='skip', encoding_errors='ignore')
-    print("Finished reading, beginning to work on SSNs")
+    print("Finished reading, beginning to work on separating SSNs and birthdays")
 
-    # Make it into a.csv series for easier manipulation.
+    # Make it into a csv series for easier manipulation.
     series = df.squeeze()
 
-
-    # Organize and separate part of the SSN.
+    # Split out SSNs and Birthdays
     ssn_series = series.str.extract('(^\s\d{9})').squeeze()
-    # Start is increased by 1 to account for the whitespace at the beginning of the SSN.
-    area_series = ssn_series.str.slice(start=1, stop=4)
-    group_series = ssn_series.str.slice(start=4, stop=6)
-    individual_series = ssn_series.str.slice(start=6)
-
-    print("Finished SSNs, beginning to work on birthdays")
-    # Find the birthday.
     temp_birthday = series.str.rstrip().str.extract('(\d{8}$)').squeeze()
-    # Reorder birthday, written explicitly while bugfixing and prefer the readability.
-    birthday = temp_birthday.str.slice(start=2, stop=4)
-    birthmonth = temp_birthday.str.slice(start=0, stop=2)
-    birthyear = temp_birthday.str.slice(start=4)
-    birthday_series = birthyear+birthmonth+birthday
 
-    # Put the data back together and make it ready for the table.
-    ssn_dataframe = pd.concat([area_series, group_series, individual_series, birthday_series], axis=1)
-    ssn_dataframe.columns = ["area", "group", "individual", "birthday"]
-    print("Finished birthdays, importing it to SQL")
+    print("Finished separating, creating temporary dataframe for manipulation.")
 
+    ssn_series = pd.to_numeric(ssn_series, errors='coerce')
+    temp_birthday = pd.to_numeric(temp_birthday, errors='coerce')
+    holder_dataframe = pd.concat([ssn_series, temp_birthday], axis=1)
+    holder_dataframe.columns = ["ssn", "birthday"]
+    # Drop error based rows, convert to an integer to ensure no floats, convert back to a string for manipulation
+    holder_dataframe = holder_dataframe.dropna(axis=0).astype(int).astype(str)
 
+    print("Created temporary frame, generating SSN dataframes")
+    # Split out parts of the SSN so they are separate for SQL
+    individual = holder_dataframe['ssn'].str[-4:].astype(int)
+    group = holder_dataframe['ssn'].str[-6:-4].astype(int)
+    area = holder_dataframe['ssn'].str[:-6].astype(int)
+
+    print("Finished SSNs, working on birthdays.")
+    # Due to the earlier conversion, have to break out the birthday and put it back together in datetime format
+
+    # Split birthday
+    birthyear = holder_dataframe['birthday'].str[-4:].astype(int, errors='ignore')
+    birthmonth = holder_dataframe['birthday'].str[-6:-4].astype(int, errors='ignore')
+    birthday = holder_dataframe['birthday'].str[:-6].astype(int, errors='ignore')
+
+    # Convert from parts to dates
+    birthdate = pd.concat([birthyear, birthmonth, birthday], axis=1)
+    birthdate.columns = ["year", "month", 'day']
+    birthdate.replace('', np.nan, inplace=True)
+    birthdate = birthdate.dropna()
+    birthdate = birthdate.astype(int)
+    birthdate = pd.to_datetime(birthdate, errors='ignore')
+    birthdate = birthdate.dropna()
+
+    print("Finished birthday, creating full dataframe for SQL")
+    # Put it all together now
+    full_data = pd.concat([area, group, individual, birthdate], axis=1)
+    full_data.columns = ['area', 'group', 'individual', 'birthdate']
+
+    print("Dataframe made, importing to SQL")
     # Put it into the table.
-    ssn_dataframe.to_sql(name="deathmaster", con=connection, if_exists="append")
+    full_data.to_sql(name="deathmaster", con=connection, if_exists="append")
 
     print("Done with " + str(name_of_file))
 
+
 def main():
     # Set up connection
-    connection = sqlite3.connect("ssnNumbers.db")
+    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
 
     # Get the list of files
     list_of_files = os.listdir(r'' + os.getcwd() + r'\Death-Master-File')
@@ -59,7 +76,6 @@ def main():
     # Get data from each file and export it.
     for file in list_of_files:
         get_death_master_file_data(name_of_file=os.path.join(str(os.getcwd()), "Death-Master-File", file), connection=connection)
-
 
     connection.commit()
 

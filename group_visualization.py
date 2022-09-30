@@ -49,7 +49,7 @@ def get_births(cursor):
     return dates, births
 def main():
     # Set up connection to database.
-    connection = sqlite3.connect("ssnNumbers.db")
+    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
 
     dates, births = get_births(cursor)

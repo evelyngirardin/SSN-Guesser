@@ -45,7 +45,7 @@ def export_data_to_sql(births_by_day, total, export_table, cursor):
 
 def main():
     # Set up connection and define variables.
-    connection = sqlite3.connect("ssnNumbers.db")
+    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
     import_table = "birthdates"
     export_table = "birthrates"

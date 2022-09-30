@@ -6,7 +6,7 @@ from area_to_state import determine_state_from_area
 
 def main():
     # Set up the connection
-    connection = sqlite3.connect("ssnNumbers.db")
+    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
 
     # Loop through all the possible area codes and input the area code and their state into the database.

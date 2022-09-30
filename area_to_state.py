@@ -87,18 +87,10 @@ def determine_state_from_area(area):
         range(586, 587): "GU,PI,AS",
         range(700, 729): "RailroadBoard",
         range(729, 734): "EnumerationatEntry",
-        range(237, 247): "NotIssued",
-        range(587, 666): "NotIssued",
-        range(667, 680): "NotIssued",
-        range(681, 700): "NotIssued",
-        range(750, 773): "NotIssued",
-        range(734, 750): "NotIssued",
-        range(773, 900): "NotIssued",
-        range(0, 1): "NotIssued",
-        range(666, 667): "NotIssued",
-        range(900, 1000): "NotIssued",
     }
     for key in area_code_dict:
         if area in key:
             returner += area_code_dict[key] + ","
+    if returner == "":
+        returner = "NotIssued,"
     return returner[:-1]

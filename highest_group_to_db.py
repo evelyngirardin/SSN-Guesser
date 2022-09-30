@@ -91,7 +91,7 @@ def export_data_to_sql(rows, date, cursor):
 
 def main():
     # Set up connection
-    connection = sqlite3.connect("ssnNumbers.db")
+    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
 
     # Get the list of files
