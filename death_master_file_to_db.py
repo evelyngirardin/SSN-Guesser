@@ -6,8 +6,10 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
+# TODO: Day and month are backwards in the database.
 # Go through the death master file documents and insert it into the table deathmaster in the form of
-# index (integer), area (INTEGER), group (INTEGER), individual (INTEGER), birthday (DATE).
+# index (integer), area (INTEGER), group (INTEGER), individual (INTEGER), birthyear (INT),
+# birthmonth (INT), birthday(INT).
 def get_death_master_file_data(name_of_file, connection):
     print("Starting on: " + str(name_of_file) + ", beginning to read...")
 
@@ -46,18 +48,18 @@ def get_death_master_file_data(name_of_file, connection):
     birthday = holder_dataframe['birthday'].str[:-6].astype(int, errors='ignore')
 
     # Convert from parts to dates
-    birthdate = pd.concat([birthyear, birthmonth, birthday], axis=1)
-    birthdate.columns = ["year", "month", 'day']
-    birthdate.replace('', np.nan, inplace=True)
-    birthdate = birthdate.dropna()
-    birthdate = birthdate.astype(int)
-    birthdate = pd.to_datetime(birthdate, errors='ignore')
-    birthdate = birthdate.dropna()
+ #   birthdate = pd.concat([birthyear, birthmonth, birthday], axis=1)
+  #  birthdate.columns = ["year", "month", 'day']
+   # birthdate.replace('', np.nan, inplace=True)
+    #birthdate = birthdate.dropna()
+    #birthdate = birthdate.astype(int)
+    #birthdate = pd.to_datetime(birthdate, errors='ignore')
+    #birthdate = birthdate.dropna()
 
     print("Finished birthday, creating full dataframe for SQL")
     # Put it all together now
-    full_data = pd.concat([area, group, individual, birthdate], axis=1)
-    full_data.columns = ['area', 'group', 'individual', 'birthdate']
+    full_data = pd.concat([area, group, individual, birthyear, birthmonth, birthday], axis=1)
+    full_data.columns = ['area', 'group', 'individual', 'birthyear', 'birthmonth', 'birthday']
 
     print("Dataframe made, importing to SQL")
     # Put it into the table.

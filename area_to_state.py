@@ -2,7 +2,9 @@
 # for states and full descriptors for certain special cases. Uses a.csv list of ranges as keys in a.csv dict and then runs
 # through the list, generating a.csv string for the possibilities. If more than one region, is it printed as R1,R2 with no
 # space inbetween.
+# DID
 
+# TODO: In the database resulting from death_master_file_to_db, some states in 251 were categorized as NotIssued, same for 519 (SC and ID respectively)
 def determine_state_from_area(area):
     returner = ""
     area_code_dict = {
@@ -82,7 +84,7 @@ def determine_state_from_area(area):
         # Special cases
         range(577, 580): "DC",
         range(580, 581): "VI",
-        range(580, 585): "PR",
+        range(580, 585): "c",
         range(596, 600): "PR",
         range(586, 587): "GU,PI,AS",
         range(700, 729): "RailroadBoard",
