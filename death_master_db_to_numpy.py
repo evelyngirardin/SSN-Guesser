@@ -11,7 +11,7 @@ def main():
     sql = '''
                     SELECT *
                     FROM deathmaster 
-                    WHERE birthyear > 1945 AND birthyear < 2011 AND state NOT IN ( 'EnumerationatEntry', 'RailroadBoard', 'NotIssued', 'GU,PI,AS', 'VI', 'PR' )
+                    WHERE birthyear > 1945 AND birthyear < 2011 AND state = 'CT'
                     ''' # The 1945 cutoff is arbitrary but hopefully gets past most people who were born earlier than
                          # the SSN program started. The island territories are removed for sake of ease for pop data for now.
     df = psql.read_sql(sql, connection)
