@@ -35,10 +35,10 @@ def export_data_to_sql(rows, cursor):
 
 def main():
     # Set up connection to the database.
-    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
+    connection = sqlite3.connect("../Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
 
-    rows = get_births(os.path.join(str(os.getcwd()), "Birth-Data", "us_births_from_social.csv"))
+    rows = get_births(os.path.join(str(os.getcwd()), "../Birth-Data", "us_births_from_social.csv"))
 
     # Input the data into database.
     export_data_to_sql(rows, cursor)

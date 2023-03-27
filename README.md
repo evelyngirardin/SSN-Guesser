@@ -1,3 +1,4 @@
+
 # Social Security Number Guesser
 
 This project is currently still in development. The end goal is to develop a method to estimate Social Security Numbers given birthdate, time, and location. I am using SQLite to manage the data.

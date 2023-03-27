@@ -1,6 +1,5 @@
 # This file is doing some preliminary visualization of the highest group numbers for the area code of 41.
 
-import matplotlib.pyplot as plt
 import datetime
 import sqlite3
 import calendar
@@ -11,16 +10,15 @@ def get_group_numbers(name_of_table, areanumber,  cursor):
     rows = cursor.execute("SELECT * FROM " + name_of_table + " WHERE areanumber = " + str(areanumber) + " AND highest = 1").fetchall()
     dates = []
     group_numbers = []
-    map = {6:0, 8: 1, 11: 2, 13: 3, 15: 4}
-    # Get data from database and form it into to lists for the plot.
+    rows.sort()
+   # Get data from database and form it into to lists for the plot.
     for row in rows:
         date_str = str(row[0])
         new_date = datetime.date(int(date_str[:4]), int(date_str[4:6]), int(date_str[6:8]))
 
         dates.append(new_date)
 
-        group_numbers.append(map[row[2]])
-    dates.sort()
+        group_numbers.append(row[2])
     return dates, group_numbers
 
 def get_births(dates, cursor):
@@ -28,7 +26,6 @@ def get_births(dates, cursor):
     year_births = dict(cursor.execute("SELECT * FROM births").fetchall())
     birth_rates = dict(cursor.execute("SELECT * FROM birthrates").fetchall())
     leap_rates = dict(cursor.execute("SELECT * FROM leaprates").fetchall())
-
     births = [0]
 
     one_day = datetime.timedelta(days=1)
@@ -56,30 +53,26 @@ def get_births(dates, cursor):
 
     return dates, births
 
-def main():
+def get_average_births(type='average'):
     # Set up connection to database.
-    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
+    connection = sqlite3.connect("../Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
     births_per_group_number = []
-
+    total_groups = []
     for x in range(40, 50):
         group_dates, group_numbers = get_group_numbers("groupnumbers", x, cursor)
         birth_dates, births = get_births(group_dates, cursor)
-
+        total_groups.append(group_numbers)
         for i in range(0, len(birth_dates)):
-            dt = birth_dates[i].isoformat()
             b = int(births[i])
             if b != 0:
-                #dt + ": " +
-                print(str(b))
                 births_per_group_number.append(b)
-    births_per_group_number.sort()
-    print(births_per_group_number)
-    print(sum(births_per_group_number)/len(births_per_group_number))
+
+    return (sum(births_per_group_number)/len(births_per_group_number))
 
 
 
 
 if __name__ == "__main__":
-    main()
+    print(get_average_births())
 

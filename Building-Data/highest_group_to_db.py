@@ -91,7 +91,7 @@ def export_data_to_sql(rows, date, cursor):
 
 def main():
     # Set up connection
-    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
+    connection = sqlite3.connect("../Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
 
     # Get the list of files
@@ -99,7 +99,7 @@ def main():
 
     # Get data from each file and export it.
     for file in list_of_files:
-        rows, date = get_data_highest_group_numbers(os.path.join(str(os.getcwd()), "SSN-Raw-Data", file))
+        rows, date = get_data_highest_group_numbers(os.path.join(str(os.getcwd()), "../SSN-Raw-Data", file))
         export_data_to_sql(rows, date, cursor)
 
     connection.commit()

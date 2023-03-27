@@ -6,7 +6,7 @@ import pandas as pd
 import pandas.io.sql as psql
 
 def main():
-    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
+    connection = sqlite3.connect("../Death-Master-File-Data/ssnNumbers.db")
     print('Fetching Data')
     sql = '''
                     SELECT *

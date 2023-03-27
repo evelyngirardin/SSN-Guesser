@@ -70,7 +70,7 @@ def get_death_master_file_data(name_of_file, connection):
 
 def main():
     # Set up connection
-    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
+    connection = sqlite3.connect("../Death-Master-File-Data/ssnNumbers.db")
 
     # Get the list of files
     list_of_files = os.listdir(r'' + os.getcwd() + r'\Death-Master-File')

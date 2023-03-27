@@ -57,7 +57,7 @@ def get_births(dates, cursor):
 
 def main():
     # Set up connection to database.
-    connection = sqlite3.connect("Death-Master-File-Data/ssnNumbers.db")
+    connection = sqlite3.connect("../Death-Master-File-Data/ssnNumbers.db")
     cursor = connection.cursor()
     births_per_group_number = []
 
